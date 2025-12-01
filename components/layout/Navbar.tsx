@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChefHat, Menu, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { SearchBar } from './SearchBar';
-import { CategoryFilter } from './CategoryFilter';
+import { SearchBarWrapper } from './SearchBarWrapper';
+import { CategoryFilterWrapper } from './CategoryFilterWrapper';
 import { Button } from '@/components/ui/Button';
 import { useState } from 'react';
 
@@ -43,8 +43,8 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-6 flex-1 mx-8">
-            <SearchBar />
-            <CategoryFilter />
+            <SearchBarWrapper />
+            <CategoryFilterWrapper />
           </div>
 
           {/* Desktop Auth Actions */}
@@ -97,8 +97,8 @@ export const Navbar = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-200">
             <div className="space-y-4">
-              <SearchBar />
-              <CategoryFilter />
+              <SearchBarWrapper />
+              <CategoryFilterWrapper />
               <div className="flex flex-col gap-2 pt-4">
                 {isAuthenticated ? (
                   <>

@@ -174,13 +174,11 @@ export const fetchRecipeById = async (id: string): Promise<Recipe | null> => {
         avatar_url: profileData.avatar_url,
       } : undefined,
       categories: categoryData ? {
-        id: categoryData.id,
         name: categoryData.name,
         slug: categoryData.slug,
       } : undefined,
       ingredients: (ingredientsData || []).map((ing: any) => ({
         id: ing.id,
-        recipe_id: ing.recipe_id,
         item: ing.item,
         quantity: ing.quantity,
         unit: ing.unit,
@@ -188,7 +186,6 @@ export const fetchRecipeById = async (id: string): Promise<Recipe | null> => {
       })),
       steps: (stepsData || []).map((step: any) => ({
         id: step.id,
-        recipe_id: step.recipe_id,
         step_number: step.step_number,
         instruction: step.instruction,
       })),
@@ -359,13 +356,13 @@ export const uploadRecipeImage = async (file: File, userId: string): Promise<str
       console.error('Storage upload error:', {
         error: uploadError,
         message: errorMessage,
-        statusCode: uploadError.statusCode,
-        name: uploadError.name,
+        statusCode: (uploadError as any).statusCode,
+        name: (uploadError as any).name,
       });
 
       // Provide more specific error messages
       const errorStr = errorMessage.toLowerCase();
-      if (errorStr.includes('bucket not found') || errorStr.includes('does not exist') || uploadError.statusCode === '404') {
+      if (errorStr.includes('bucket not found') || errorStr.includes('does not exist') || (uploadError as any).statusCode === '404') {
         throw new Error(`Storage bucket "${BUCKET_NAME}" not found (404). Please verify:
 1. The bucket exists in Supabase Dashboard → Storage
 2. The bucket name is exactly "${BUCKET_NAME}" (case-sensitive)

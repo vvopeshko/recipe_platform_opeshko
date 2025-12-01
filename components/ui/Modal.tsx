@@ -97,6 +97,7 @@ interface ConfirmModalProps {
   confirmText?: string;
   cancelText?: string;
   variant?: 'danger' | 'primary';
+  isLoading?: boolean;
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -108,20 +109,27 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   confirmText = 'Confirm',
   cancelText = 'Cancel',
   variant = 'danger',
+  isLoading = false,
 }) => {
   const handleConfirm = () => {
+    if (isLoading) return;
     onConfirm();
+    // Don't close immediately - let the parent handle it after async operation completes
+  };
+
+  const handleClose = () => {
+    if (isLoading) return; // Prevent closing while loading
     onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
+    <Modal isOpen={isOpen} onClose={handleClose} title={title} size="sm">
       <p className="text-gray-600 mb-6">{message}</p>
       <div className="flex justify-end gap-3">
-        <Button variant="outline" onClick={onClose}>
+        <Button variant="outline" onClick={handleClose} disabled={isLoading}>
           {cancelText}
         </Button>
-        <Button variant={variant} onClick={handleConfirm}>
+        <Button variant={variant} onClick={handleConfirm} isLoading={isLoading}>
           {confirmText}
         </Button>
       </div>
